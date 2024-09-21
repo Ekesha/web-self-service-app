@@ -49,7 +49,7 @@
     "wiredep": "~2.2.0"
   },
   "engines": {
-    "node": "8.9.1"
+    "node": ">=14"
   },
   "scripts": {
     "init": "npm install",

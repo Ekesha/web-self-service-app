@@ -1,16 +1,12 @@
 'use strict';
 
 var gulp = require('gulp');
-
 var paths = gulp.paths;
-
 var $ = require('gulp-load-plugins')({
     pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 var hash = require('gulp-hash-filename');
-
 var wiredep = require('wiredep').stream;
-var runSequence = require('run-sequence');
 
 gulp.task('partials', function () {
     return gulp.src([
@@ -29,11 +25,10 @@ gulp.task('partials', function () {
         .pipe(hash({
             "format": "{name}.{hash:8}{ext}"
         }))
-        .pipe(gulp.dest(paths.dist + '/js'))
+        .pipe(gulp.dest(paths.dist + '/js'));
 });
 
-gulp.task('html', ['partials'], function () {
-
+gulp.task('html', gulp.series('partials', function () {
     return gulp.src(paths.src + '/*.html')
         .pipe($.minifyHtml({
             empty: true,
@@ -41,30 +36,29 @@ gulp.task('html', ['partials'], function () {
             quotes: true
         }))
         .pipe(gulp.dest(paths.dist + '/'))
-        .pipe($.size({title: paths.dist + '/', showFiles: true}));
-});
+        .pipe($.size({ title: paths.dist + '/', showFiles: true }));
+}));
 
 gulp.task('vendor', function () {
-    var jsFilter = $.filter('**/*.js');
-    var cssFilter = $.filter('**/*.css');
+    var jsFilter = $.filter('**/*.js', { restore: true });
+    var cssFilter = $.filter('**/*.css', { restore: true });
 
     return gulp.src($.mainBowerFiles())
         .pipe(jsFilter)
         .pipe($.angularFilesort())
         .pipe(gulp.dest(paths.dist + '/vendor'))
-        .pipe(jsFilter.restore())
+        .pipe(jsFilter.restore)
         .pipe(cssFilter)
         .pipe(gulp.dest(paths.dist + '/vendor'))
-        .pipe(cssFilter.restore())
+        .pipe(cssFilter.restore);
 });
 
 gulp.task('app-js', function () {
     return gulp.src(paths.src + '/*.js')
         .pipe(gulp.dest(paths.dist));
-})
+});
 
-gulp.task('js', ['vendor', 'partials', 'app-js'], function () {
-
+gulp.task('js', gulp.series('vendor', 'partials', 'app-js', function () {
     return gulp.src([
         paths.src + '/src/**/*.js',
         '!' + paths.src + '/src/**/*.spec.js',
@@ -76,7 +70,7 @@ gulp.task('js', ['vendor', 'partials', 'app-js'], function () {
             "format": "{name}.{hash:8}{ext}"
         }))
         .pipe(gulp.dest(paths.dist + '/js'));
-})
+}));
 
 gulp.task('images', function () {
     return gulp.src(paths.src + '/assets/images/**/*')
@@ -91,20 +85,18 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('misc', function () {
-  return gulp.src([
+    return gulp.src([
         paths.src + '/**/*.ico',
         paths.src + '/**/locale-*.json'
     ])
-    .pipe(gulp.dest(paths.dist + '/'));
+        .pipe(gulp.dest(paths.dist + '/'));
 });
 
-gulp.task('clean', function (done) {
-    $.del([paths.dist + '/', paths.tmp + '/'], done);
+gulp.task('clean', function () {
+    return $.del([paths.dist + '/', paths.tmp + '/']);
 });
 
-gulp.task('build', function (callback) {
-    runSequence('clean',
-        'js', 'inject:build',
-        'images', 'fonts', 'misc',
-        callback);
-});
+// The build task now uses gulp.series to run tasks in sequence
+gulp.task('build', gulp.series('clean', 'js', 'images', 'fonts', 'misc', function (done) {
+    done(); // Ensure callback is called after the build sequence finishes
+}));
