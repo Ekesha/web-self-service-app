@@ -1,18 +1,18 @@
 'use strict';
 
 var gulp = require('gulp');
-
-var paths = gulp.paths;
-
+var paths = gulp.paths; // Assuming this is defined elsewhere
 var $ = require('gulp-load-plugins')();
-
 var wiredep = require('wiredep').stream;
 
-gulp.task('inject:build', ['styles'], function () {
-    var injectStyles = gulp.src(
-        paths.dist + '/styles/*.css',
-        {read: false}
-    );
+// Assuming you have a `styles` task already defined
+gulp.task('styles', function () {
+    // Implement your styles task logic here (e.g., compile CSS or Sass)
+});
+
+// inject:build task
+gulp.task('inject:build', gulp.series('styles', function () {
+    var injectStyles = gulp.src(paths.dist + '/styles/*.css', { read: false });
 
     var injectScripts = gulp.src([
         paths.dist + '/js/*.js'
@@ -27,10 +27,10 @@ gulp.task('inject:build', ['styles'], function () {
         fileTypes: {
             html: {
                 replace: {
-                    js: function(filePath) {
+                    js: function (filePath) {
                         return '<script src="' + 'vendor/' + filePath.split('/').pop() + '"></script>';
                     },
-                    css: function(filePath) {
+                    css: function (filePath) {
                         return '<link rel="stylesheet" href="' + 'vendor/' + filePath.split('/').pop() + '"/>';
                     }
                 }
@@ -43,14 +43,14 @@ gulp.task('inject:build', ['styles'], function () {
         .pipe($.inject(injectStyles, injectOptions))
         .pipe($.inject(injectScripts, injectOptions))
         .pipe(gulp.dest(paths.dist));
-});
+}));
 
-gulp.task('inject', ['styles'], function () {
-
+// inject task
+gulp.task('inject', gulp.series('styles', function () {
     var injectStyles = gulp.src([
         paths.tmp + '/serve/**/*.css',
         '!' + paths.tmp + '/serve/app/vendor.css'
-    ], {read: false});
+    ], { read: false });
 
     var injectScripts = gulp.src([
         paths.src + '/**/*.js',
@@ -73,5 +73,4 @@ gulp.task('inject', ['styles'], function () {
         .pipe($.inject(injectScripts, injectOptions))
         .pipe(wiredep(wiredepOptions))
         .pipe(gulp.dest(paths.tmp + '/serve'));
-
-});
+}));
