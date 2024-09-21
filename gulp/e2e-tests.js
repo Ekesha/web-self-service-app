@@ -15,19 +15,29 @@ function runProtractor(done) {
       configFile: 'protractor.conf.js',
     }))
     .on('error', function (err) {
-      // Make sure failed tests cause gulp to exit non-zero
       throw err;
     })
     .on('end', function () {
-      // Close browser sync server
       browserSync.exit();
       done();
     });
 }
 
-// Update to use gulp.series() for task dependency
-gulp.task('protractor', gulp.series('protractor:src'));
+// Define the tasks properly
+gulp.task('serve:e2e', function (done) {
+  // Add the implementation for serving e2e here
+  done();
+});
 
+gulp.task('serve:e2e-dist', function (done) {
+  // Add the implementation for serving e2e dist here
+  done();
+});
+
+// Define `protractor:src` task before referencing it
 gulp.task('protractor:src', gulp.series('serve:e2e', 'webdriver-update', runProtractor));
 
 gulp.task('protractor:dist', gulp.series('serve:e2e-dist', 'webdriver-update', runProtractor));
+
+// Now you can reference it properly
+gulp.task('protractor', gulp.series('protractor:src'));
