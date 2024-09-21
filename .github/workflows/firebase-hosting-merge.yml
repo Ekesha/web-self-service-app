@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '8.9.1'  # Specify the Node.js version here
-      - run: npm ci && gulp build
+      - run: npm run ci && gulp build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
