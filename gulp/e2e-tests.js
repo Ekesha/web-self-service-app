@@ -1,20 +1,15 @@
 'use strict';
 
 var gulp = require('gulp');
-
 var $ = require('gulp-load-plugins')();
-
 var browserSync = require('browser-sync');
-
 var paths = gulp.paths;
 
 // Downloads the selenium webdriver
 gulp.task('webdriver-update', $.protractor.webdriver_update);
-
 gulp.task('webdriver-standalone', $.protractor.webdriver_standalone);
 
-function runProtractor (done) {
-
+function runProtractor(done) {
   gulp.src(paths.e2e + '/**/*.js')
     .pipe($.protractor.protractor({
       configFile: 'protractor.conf.js',
@@ -30,6 +25,9 @@ function runProtractor (done) {
     });
 }
 
-gulp.task('protractor', ['protractor:src']);
-gulp.task('protractor:src', ['serve:e2e', 'webdriver-update'], runProtractor);
-gulp.task('protractor:dist', ['serve:e2e-dist', 'webdriver-update'], runProtractor);
+// Update to use gulp.series() for task dependency
+gulp.task('protractor', gulp.series('protractor:src'));
+
+gulp.task('protractor:src', gulp.series('serve:e2e', 'webdriver-update', runProtractor));
+
+gulp.task('protractor:dist', gulp.series('serve:e2e-dist', 'webdriver-update', runProtractor));
