@@ -1,20 +1,16 @@
 'use strict';
 
 var gulp = require('gulp');
-
-var paths = gulp.paths;
-
 var util = require('util');
-
 var browserSync = require('browser-sync');
-
-var middleware = require('./proxy');
+var middleware = require('./proxy'); // Ensure this module is correctly implemented
+var paths = gulp.paths; // Assuming this is defined elsewhere
 
 function browserSyncInit(baseDir, files, browser) {
   browser = browser === undefined ? 'default' : browser;
 
   var routes = null;
-  if(baseDir === paths.src || (util.isArray(baseDir) && baseDir.indexOf(paths.src) !== -1)) {
+  if (baseDir === paths.src || (util.isArray(baseDir) && baseDir.indexOf(paths.src) !== -1)) {
     routes = {
       '/bower_components': 'bower_components'
     };
@@ -22,7 +18,7 @@ function browserSyncInit(baseDir, files, browser) {
 
   browserSync.instance = browserSync.init(files, {
     startPath: '/',
-    ghostMode:false,
+    ghostMode: false,
     server: {
       baseDir: baseDir,
       middleware: middleware,
@@ -32,28 +28,32 @@ function browserSyncInit(baseDir, files, browser) {
   });
 }
 
-gulp.task('serve', ['watch'], function () {
+// Serve task for development
+gulp.task('serve', gulp.series('watch', function () {
   browserSyncInit([
     paths.tmp + '/serve',
     paths.src
-  ], [    
+  ], [
     paths.src + '/src/**/*.js',
-    paths.src + '/src/**/*.html',       
-    paths.src + '/assets/images/**/*', 
+    paths.src + '/src/**/*.html',
+    paths.src + '/assets/images/**/*',
     paths.tmp + '/serve/*.html',
     paths.tmp + '/serve/**/*.html',
     paths.tmp + '/serve/**/*.css'
   ]);
-});
+}));
 
-gulp.task('serve:dist', ['build'], function () {
+// Serve task for production
+gulp.task('serve:dist', gulp.series('build', function () {
   browserSyncInit(paths.dist);
-});
+}));
 
-gulp.task('serve:e2e', ['inject'], function () {
+// Serve task for end-to-end testing
+gulp.task('serve:e2e', gulp.series('inject', function () {
   browserSyncInit([paths.tmp + '/serve', paths.src], null, []);
-});
+}));
 
-gulp.task('serve:e2e-dist', ['build'], function () {
+// Serve task for end-to-end testing in dist mode
+gulp.task('serve:e2e-dist', gulp.series('build', function () {
   browserSyncInit(paths.dist, null, []);
-});
+}));
