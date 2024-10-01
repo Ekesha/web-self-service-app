@@ -28,4 +28,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MALI_434814 }}
           projectId: mali-434814
-          site: mali-434814-64d4c  # This should match the site defined in firebase.json
+          site: mali-434814-64d4d  # This should match the site defined in firebase.json
