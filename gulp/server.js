@@ -6,6 +6,7 @@ var browserSync = require('browser-sync');
 var middleware = require('./proxy'); // Ensure this module is correctly implemented
 var paths = gulp.paths; // Assuming this is defined elsewhere
 
+// Function to initialize browser-sync
 function browserSyncInit(baseDir, files, browser) {
   browser = browser === undefined ? 'default' : browser;
 
@@ -27,6 +28,11 @@ function browserSyncInit(baseDir, files, browser) {
     browser: browser
   });
 }
+
+// Define the watch task
+gulp.task('watch', function () {
+  gulp.watch([paths.src + '/src/**/*.js'], gulp.series('inject')); // Adjust paths and tasks accordingly
+});
 
 // Serve task for development
 gulp.task('serve', gulp.series('watch', function () {
