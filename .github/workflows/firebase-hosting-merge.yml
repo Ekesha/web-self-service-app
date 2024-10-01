@@ -18,7 +18,7 @@ jobs:
       - name: Set TMPDIR
         run: echo "TMPDIR=/tmp" >> $GITHUB_ENV
 
-      - run: npm install && npm install gulp@^4.0.0 && npm run build
+      - run: npm install && npm install gulp@^4.0.0 && gulp build
 
       # - run: npx firebase-tools@latest deploy --only hosting --project mali-434814 --json
 

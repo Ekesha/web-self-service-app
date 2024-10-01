@@ -16,15 +16,17 @@ require('require-dir')('./gulp');
 
 // Clean task to delete dist and tmp directories
 gulp.task('clean', function () {
+  console.log('Cleaning up dist and tmp directories...');
   return del([gulp.paths.dist, gulp.paths.tmp]);
 });
 
-// Placeholder for your build task
-gulp.task('build', function (done) {
-  // Add your actual build process here
-  // Example: returning a stream or using the done callback if synchronous
-  console.log('Building...');
-  done();
+// Build task to copy files from src to dist
+gulp.task('build', function () {
+  return gulp.src(gulp.paths.src + '/**/*') // Adjust source path as needed
+    .pipe(gulp.dest(gulp.paths.dist)) // Output to dist
+    .on('end', function () {
+      console.log('Build completed!');
+    });
 });
 
 // Default task: clean and then build
