@@ -29,3 +29,4 @@ jobs:
           channelId: live
           projectId: mali-434814
           site: mali-434814-64d4d  # This should match the site defined in firebase.json
+          hostingRegion: us-central1
