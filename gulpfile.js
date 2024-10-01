@@ -1,5 +1,7 @@
 'use strict';
 
+const gulp = require('gulp'); // Import Gulp
+
 const { src, dest, watch, series } = require('gulp');
 
 gulp.paths = {
