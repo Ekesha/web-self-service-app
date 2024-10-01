@@ -10,11 +10,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Set up Node.js to version 18.x to match Firebase CLI requirements
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'  # Use Node.js v18 or higher
+
+      - name: Set up temp directories
+        run: |
+          mkdir -p /tmp/phantomjs
+          echo "TMPDIR=/tmp/phantomjs" >> $GITHUB_ENV
 
       # Install dependencies, remove old gulp, install Gulp 4 and build the project
       - run: |
