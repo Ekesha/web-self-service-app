@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '14'  # Specify the Node.js version here
       - run: npm install && npm uninstall gulp && npm install gulp@4 && npm install -g gulp-cli@2.3.0 && gulp build
-      - run: gulp watch  # Ensure this matches the defined task
+      # - run: gulp watch  # Ensure this matches the defined task
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
