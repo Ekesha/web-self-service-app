@@ -13,26 +13,19 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'  # Use Node.js v18 or higher
+          node-version: '14'  # Specify your desired Node.js version
 
-      - name: Set up temp directories
+      - name: Install dependencies
         run: |
-          mkdir -p /tmp/phantomjs
-          echo "TMPDIR=/tmp/phantomjs" >> $GITHUB_ENV
-
-      # Install dependencies, remove old gulp, install Gulp 4 and build the project
-      - run: |
           npm install
           npm uninstall gulp
           npm install gulp@4
           npm install -g gulp-cli@2.3.0
-          gulp build  # Ensure that your gulpfile correctly defines this task
+          gulp build
 
-      # Deploy to Firebase Hosting
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MALI_434814 }}
-          channelId: live  # Live channel to deploy to production
-          projectId: mali-434814  # Firebase project ID
-          target: hosting  # Specify hosting target
+          projectId: mali-434814
+          site: mali-434814-64d4c  # This should match the site defined in firebase.json

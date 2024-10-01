@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "mali-434814-64d4c",
     "public": "dist",
     "ignore": [
       "firebase.json",
@@ -13,5 +12,6 @@
         "destination": "/index.html"
       }
     ]
-  }
+  },
+  "site": "mali-434814-64d4c" // Move the site definition here
 }
