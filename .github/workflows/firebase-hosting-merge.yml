@@ -26,5 +26,6 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MALI_434814 }}
+          channelId: live
           projectId: mali-434814
           site: mali-434814-64d4d  # This should match the site defined in firebase.json
