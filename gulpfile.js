@@ -1,7 +1,9 @@
 'use strict';
 
 var gulp = require('gulp');
+var del = require('del');
 
+// Paths
 gulp.paths = {
   src: 'app',
   dist: 'dist',
@@ -12,5 +14,18 @@ gulp.paths = {
 // Automatically require tasks from the gulp directory
 require('require-dir')('./gulp');
 
-// Define the default task for Gulp 4
+// Clean task to delete dist and tmp directories
+gulp.task('clean', function () {
+  return del([gulp.paths.dist, gulp.paths.tmp]);
+});
+
+// Placeholder for your build task
+gulp.task('build', function (done) {
+  // Add your actual build process here
+  // Example: returning a stream or using the done callback if synchronous
+  console.log('Building...');
+  done();
+});
+
+// Default task: clean and then build
 gulp.task('default', gulp.series('clean', 'build'));
