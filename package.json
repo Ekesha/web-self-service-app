@@ -5,7 +5,7 @@
     "core-js": "^3.38.1",
     "firebase": "^10.13.2",
     "ngmap": "^1.18.5",
-    "puppeteer": "^23.4.1"
+    "phantomjs": "^2.1.7"
   },
   "devDependencies": {
     "browser-sync": "~1.7.1",

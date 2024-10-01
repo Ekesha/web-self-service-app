@@ -13,7 +13,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'  # Upgrade to Node.js 18.x or 20.x
+          node-version: '18.x'  # Ensure you're using a compatible Node.js version
+
+      - name: Set TMPDIR
+        run: echo "TMPDIR=/tmp" >> $GITHUB_ENV
 
       - run: npm install && npm install gulp@3 && gulp build
 
